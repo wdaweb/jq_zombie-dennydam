@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background: url(./小新家.jpg);
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 1900px;
+      height: 965px;
+      margin: 0px;
+      overflow: hidden;
+
+    }
+
+    body {
+      margin: 0px;
+      padding: 0px;
+
+    }
+
+    .col {
+      position: absolute;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .back {
+      width: 1920px;
+      height: 965px;
+      margin: 0px;
+      overflow: hidden;
+    }
+
+
+    #game {
+      cursor: url(./cursor.gif) 50 50, auto;
+      width: 800px;
+      height: 800px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      position: relative;
+      /* border: 1px red solid; */
+      left: -60px;
+      top: -5px;
+      margin: 0 auto;
+      text-align: center;
+      border-radius: 0;
+      animation: myfirst 10s infinite linear;
+      transform-origin: center 50%;
+    }
+
+    /*@keyframes myfirst {*/
+    /* from {*/
+    /*   transform: rotate(0);*/
+    /*}*/
+
+    /* to {*/
+    /*  transform: rotate(360deg);*/
+    /* }*/
+    /* }*/
+
+    #game img {
+      height: 150px;
+      position: absolute;
+    }
+
+    .zombie {
+      z-index: 1000;
+    }
+
+    .col1 {
+      position: absolute;
+      left: 400px;
+    }
+
+    .col2 {
+      position: absolute;
+      left: 500px;
+    }
+
+    .col3 {
+      position: absolute;
+      left: 115px;
+      top: 765px;
+    }
+
+    .col4 {
+      position: absolute;
+      left: 1000px;
+      width: 200px;
+      height: 200px;
+      top: 360px;
+    }
+
+    .img5 {
+      position: absolute;
+      left: -100px;
+      top: 300px;
+      width: 600px;
+      height: 600px;
+    }
+
+    .zombie {
+      transition-duration: 3s;
+      transform: scale(1.0);
+
+    }
+
+    .col5 {
+      position: absolute;
+      left: 1350px;
+      width: 180px;
+      height: 300px;
+      top: -15px;
+    }
+
+    #img6 {
+      width: 550px;
+      height: 980px;
+
+
+
+    }
+
+    .img7 {
+      width: 130px;
+      height: 200px;
+      position: absolute;
+      left: 30px;
+
+
+    }
+
+    .col6 {
+      position: absolute;
+      left: 1500px;
+      width: 180px;
+      height: 300px;
+      top: 200px;
+    }
+
+    input {
+      display: inline - block;
+      position: relative;
+      top: 0px;
+      left: 1500px;
+      margin: 10px;
+      padding: 0 20px;
+      text-align: center;
+      text-decoration: none;
+      font: bold 12px / 25px Arial, sans-serif;
+      color: #021225;
+      background: #e93d3d;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      font-size: 20px;
+
+
+    }
+
+    .col7 {
+      position: absolute;
+      left: 1500px;
+
+    }
+
+    .house {
+      position: absolute;
+      top: 0px;
+      overflow: hidden;
+      margin: 0px;
+      padding: 0px;
+
+    }
+
+    .img8 {
+      width: 1920px;
+      height: 965px;
+
+    }
+
+    #myimg {
+      vertical-align: middle;
+
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="col"><img class="back" src="./小新家.jpg"></div>
+  <div class="col1"><img class="img2" src="./小新.png"></div>
+
+  <div class="col3"><img class="img4" src="./peoplelast.png"></div>
+
+  !---<div class="col5">
+
+    <img class="img5" src="./美芽.gif">
+  </div>
+
+  <div class="col6"><img class="img7" src="./angry.png"></div>
+
+  <div class="house"><img class="img8" src="./house.jpg"></div>
+
+  <!-- <img id="myimg" src="./美芽發火.png" style="left:500px; top:500px; position:absolute" /> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <input type="button" value="start" id="btn-start">
+  <br>
+  <div class="col7">
+    <p>分數: <span id="score">0</span>分</p>
+    最高分
+    <br>
+    玩家：<span id="highname">???</span>
+    分數：<span id="highscore">0</span>
+    <p>剩餘: <span id="time">0</span>秒</p>
+  </div>
+  <div id="game">
+
+  </div>
+  <script src="../jquery-3.6.0.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const img = document.getElementById("myimg");
+
+
+    const scoreText = document.getElementById('score')
+    const highnameText = document.getElementById('highname')
+    const highscoreText = document.getElementById('highscore')
+    // 分數
+    let score = 0
+    // 倒數時間
+    let countdown = 30
+    // 計時器
+    let timer = 0
+
+
+
+    const high = { score: 0 }
+
+    const storage = JSON.parse(localStorage.getItem('dadishu'))
+    // 如果有資料
+    if (storage) {
+      high.name = storage.name
+      high.score = storage.score
+      // 修改最高分顯示文字
+      highnameText.innerText = high.name
+      highscoreText.innerText = high.score
+    }
+
+    const move = (zombie) => {
+      // 隨機移動
+      const top = `${Math.round(Math.random() * 70)}%`
+      const left = `${Math.round(Math.random() * 70)}%`
+      zombie.stop().animate({
+        top: top,
+        // 如果 json 物件的值是變數，且跟 key 一樣時可以這樣寫
+        // left: left ---> left
+        left
+      }, 2000, function () {
+        // 移動完之後遞迴再動一次
+        move(zombie)
+      })
+    }
+
+    const move2 = (dog) => {
+      // 隨機移動
+      const top2 = `${Math.round(Math.random() * 80)}%`
+      const left2 = `${Math.round(Math.random() * 80)}%`
+      dog.stop().animate({
+        top: top2,
+        // 如果 json 物件的值是變數，且跟 key 一樣時可以這樣寫
+        // left: left ---> left
+        left
+      }, 2000, function () {
+        // 移動完之後遞迴再動一次
+        move2(dog)
+      })
+    }
+
+
+
+
+    $('#btn-start').click(function () {
+      $(".img8").fadeOut(1000)
+      // 停用開始按鈕
+      $(this).attr('disabled', true)
+      // 重設
+      score = 0
+      $('#score').text(score)
+      countdown = 30
+      $('#time').text(countdown)
+
+      // 開始遊戲
+      timer = setInterval(function () {
+        // 倒數
+        countdown--
+        $('#time').text(countdown)
+
+        // 隨機產生殭屍
+        let random = Math.round(Math.random() * 8)
+        if (random > 5 && $("#game .zombie").length < 8) {
+          // 隨機位置出現
+          const top = `${Math.round(Math.random() * 70)}%`
+          const left = `${Math.round(Math.random() * 70)}%`
+          const zombie = $(`<img class="zombie" src="./小新2.gif" style="top:${top}; left:${left}; ">`)
+          const top2 = `${Math.round(Math.random() * 80)}%`
+          const left2 = `${Math.round(Math.random() * 80)}%`
+          const dog = $(`<img class="dog" src="./小白last.png" style="top:${top2}; left:${left2}; ">`)
+
+
+          //         onkeydown = function (event) {
+          //       switch (event.keyCode) {
+          //        case 37:
+          //       img.style.left = img.offsetLeft - 20 + "px";
+          //         break; //向左移动
+
+          //         case 38:
+          //        img.style.top = img.offsetTop - 20 + "px";
+          //        break; //向上移动
+
+          //       case 39:
+          //       img.style.left = img.offsetLeft + 20 + "px";
+          //       break; //向右移动
+
+          //       case 40:
+          //       img.style.top = img.offsetTop + 20 + "px";
+          //       break; //向下移动
+          //   }
+          // }
+
+          /*$('.zombie').animate({
+ 
+            width: '300px',
+ 
+            height: '+=200px'
+          }, 3000, function () {
+ 
+          })*/
+
+          $("#game").append(dog)
+          $("#game").append(zombie)
+          setTimeout(function () {
+            zombie.css('transform', 'scale(2.5)', 'transition-ease-in:2s');
+          }, 3000)
+          move(zombie)
+          move(dog)
+        }
+        // 時間到
+        if (countdown <= 0) {
+          clearInterval(timer)
+          // 清除遊戲區域
+          $('#game img').remove()
+          // 重新起用開始按鈕
+          $("#btn-start").attr('disabled', false)
+          Swal.fire({
+            icon: 'info',
+            title: '時間到',
+            text: `你得到 ${score} 分`
+
+
+
+
+          })
+          if (score > high.score) {
+
+            const input = prompt('最高分，請輸入名字')
+            high.score = score
+            high.name = input || '???'
+
+            highnameText.innerText = high.name
+            highscoreText.innerText = high.score
+
+            localStorage.setItem('dadishu', JSON.stringify(high))
+          }
+
+        }
+      }, 1000)
+
+    })
+
+    if (score > high.score) {
+
+      const input = prompt('最高分，請輸入名字')
+      high.score = score
+      high.name = input || '???'
+
+      highnameText.innerText = high.name
+      highscoreText.innerText = high.score
+
+      localStorage.setItem('dadishu', JSON.stringify(high))
+    }
+
+    $('.zombie').onclick = () => {
+
+      $('.zombie').attr('src', './clicklast.png')
+
+
+
+
+
+    }
+
+
+    $('#game').on('click', '.zombie', function () {
+
+      $(this).attr('src', './click小新.png')
+      $(this).stop()
+      $(this).css({
+        // 無法點兩下選取
+        'user-select': 'none',
+        // 無法按住拖曳
+        '-webkit-user-drag': 'none',
+        // 忽略點擊事件
+        'pointer-events': 'none'
+      })
+
+      score++
+      $('#score').text(score)
+
+    })
+
+
+
+    $('#game').on('click', '.dog', function () {
+      $(this).attr('src', '')
+      $(this).stop()
+      $(this).css({
+        // 無法點兩下選取
+        'user-select': 'none',
+        // 無法按住拖曳
+        '-webkit-user-drag': 'none',
+        // 忽略點擊事件
+        'pointer-events': 'none'
+      })
+      const audio = document.createElement("audio");
+      audio.src = "";
+      audio.play();
+
+
+
+
+
+
+      score--
+      $('#score').text(score)
+    })
+
+    dog.onclick = () => {
+      const audio = document.createElement("audio");
+      audio.src = "./meow.mp3";
+      audio.play();
+
+
+
+    }
+
+
+
+    $('#dog').on('click', function () {
+
+      music.play();
+      score--
+      $('#score').text(score)
+    })
+  </script>
+</body>
+
+</html>
